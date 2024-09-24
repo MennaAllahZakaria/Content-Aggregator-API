@@ -28,13 +28,15 @@ app.options('*',cors());
 
 //compression -> compress all responses
 app.use(compression());
+// connect to DB
+dbConnection();
 
 // limit repeated requests to public APIs and/or endpoints
 app.use(express.json({limit:'20kb'}));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 //To apply data sanitization
-app,use(mongoSanitize());
+app.use(mongoSanitize());
 
 if ( process.env.NODE_ENV==='development'){
     app.use(morgan('dev'));
