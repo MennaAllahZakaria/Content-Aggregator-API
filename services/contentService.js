@@ -3,6 +3,7 @@
 const axios = require('axios');
 const asyncHandler=require("express-async-handler"); 
 const Content = require('../models/contentModel');
+const Category =require('../models/categoryModel');
 const handlerFactory=require("./handlerFactory");
 const ApiError = require("../utils/ApiError");
 
@@ -17,11 +18,18 @@ const isValidUrl = (string) => {
 // @access  Private
 
 exports.fetchFromUserUrl=asyncHandler(async(req,res,next)=>{
-    const { url, contentType, headers, params } = req.body;
+    const { url, contentType, headers, params ,category } = req.body;
 
     // Validate URL format (basic check)
     if (!url || !isValidUrl(url)) {
         return next(new ApiError('Invalid URL provided.',400));
+    }
+
+    if (category){
+        const categoryExists=await Category.findById(category);
+        if (!categoryExists){
+            return next(new ApiError(`No category found for this id ${category}`, 404));
+        }
     }
 
     // Set up the request options
@@ -45,6 +53,7 @@ exports.fetchFromUserUrl=asyncHandler(async(req,res,next)=>{
         contentType: contentType || 'unknown',  // User-defined content type
         source: new URL(url).hostname,          // Extract domain from URL
         publishDate: new Date(),                // Assign current time as publish date
+        category: category || null,          // Assign user-provided category if available
     };
 
     // Save to MongoDB
