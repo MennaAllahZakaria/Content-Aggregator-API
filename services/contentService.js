@@ -74,7 +74,7 @@ exports.searchContent = asyncHandler(async (req, res, next) => {
 
     // Check if the query parameter is provided
     if (!query) {
-        return next(new ApiError('No search query provided.', 400));
+        return next(new ApiError('No search query provided.', 404));
     }
 
     // Find contents matching the query in title, description, source, or contentType

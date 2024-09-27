@@ -51,6 +51,10 @@ const userSchema=new mongoose.Schema({
         default:true,
     },
 
+    bookmarks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Content' 
+    }],
     
     
 
@@ -63,7 +67,14 @@ userSchema.pre('save',async function(next){
     
     this.password=await bcrypt.hash(this.password,12);
     next();
-})
+});
+
+userSchema.set('toJSON', {
+    transform: function(doc, ret, options) {
+        delete ret.password; 
+        return ret;
+    }
+});
 
 
 const UserModel= new mongoose.model("User",userSchema);
