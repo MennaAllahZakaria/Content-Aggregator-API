@@ -33,7 +33,10 @@ router.get('/',getContents);
 
 router.route('/:id').get(getContent)
                     .put(updateContent)
-                    .delete(deleteContent);
+                    .delete(
+                        allowedTo('admin'),
+                        deleteContent
+                    );
 
 
 

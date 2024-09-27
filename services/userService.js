@@ -159,10 +159,10 @@ exports.updateLoggedUserData=asyncHandler(async(req,res,next)=>{
 
 
 // @desc    Deactvate logged user 
-// @route   PUT /api/v1/users/deleteMe
+// @route   PUT /api/v1/users/deactvateMe
 // @access  Private/protect
 
-exports.deleteLoggedUserData=asyncHandler(async(req,res,next)=>{
+exports.deactvateLoggedUser=asyncHandler(async(req,res,next)=>{
     await User.findByIdAndUpdate(
         req.user._id,{
             active:false,
@@ -172,7 +172,32 @@ exports.deleteLoggedUserData=asyncHandler(async(req,res,next)=>{
         }
     );
 
-    res.status(204).json({msg:"Deleted"});
+    res.status(204).json({msg:"Deactivated"});
 
 });
 
+// @desc    Update User Role 
+// @route   PUT /api/v1/users/role
+// @access  Private/admin
+
+exports.updateUserRole=asyncHandler(async(req,res,next)=>{
+
+    const user = await User.findById(req.body.user);
+    if (!user) {
+        return next(
+        new ApiError(`No user for this id ${req.body.user}`, 404)
+        );
+    }
+
+    await User.findByIdAndUpdate(
+        user,{
+            role:"admin"?"user":"admin",
+        },
+        {
+            new:true,
+        }
+    );
+
+    res.status(204).json({msg:"Role updated"});
+
+});

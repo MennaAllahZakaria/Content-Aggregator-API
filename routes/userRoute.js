@@ -24,7 +24,9 @@ const {
     getLoggedUserData,
     updateLoggedUserPassword,
     updateLoggedUserData,
-    deleteLoggedUserData
+    deactvateLoggedUser,
+    updateUserRole
+    
     
 }=require("../services/userService");
 
@@ -38,13 +40,14 @@ router.use(protect);
 router.get('/getMe',getLoggedUserData,getUser);
 router.put('/changeMyPassword', updateLoggedUserPassword);
 router.put('/updateMe',updateLoggedUserValidator, updateLoggedUserData);
-router.delete('/deleteMe',deleteLoggedUserData);
+router.delete('/deactvateMe',deactvateLoggedUser);
 
 router.use(allowedTo('admin','manager'));
 router.put('/changePassword/:id',
             changeUserPasswordValidator,
             changeUserPassword
         );
+router.put('/role',updateUserRole);
 
 
 router.route('/')
