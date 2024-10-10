@@ -1,0 +1,9 @@
+services:
+  node-app:
+    container_name: express-node-app-container
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./config.env
+  
