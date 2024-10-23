@@ -6,4 +6,16 @@ services:
       - "8000:8000"
     env_file:
       - ./config.env
-  
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo-db:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  mongo-db:
